@@ -1,7 +1,6 @@
 cc_library(
     name = "confpp",
     hdrs = ["conf++.h"],
-    includes = ["."],
     visibility = ["//visibility:public"],
     deps = ["//lib"],
 )
