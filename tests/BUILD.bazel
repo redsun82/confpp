@@ -1,0 +1,12 @@
+cc_test(
+    name = "configuration",
+    srcs = ["configuration_test.cpp"],
+    deps = [
+        "//lib",
+        "@catch2//:catch2_main",
+    ],
+)
+
+test_suite(
+    name = "tests",
+)

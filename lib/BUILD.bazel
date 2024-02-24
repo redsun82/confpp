@@ -1,0 +1,5 @@
+cc_library(
+    name = "lib",
+    hdrs = ["configuration.h"],
+    visibility = ["//:__subpackages__"],
+)

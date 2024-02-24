@@ -1,2 +1,2 @@
-# confpp
-A program configuration library for modern C++
+# conf++
+A (WIP) program configuration library for modern C++.
