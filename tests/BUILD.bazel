@@ -2,7 +2,7 @@ cc_test(
     name = "configuration",
     srcs = ["configuration_test.cpp"],
     deps = [
-        "//lib",
+        "//confpp",
         "@catch2//:catch2_main",
     ],
 )
