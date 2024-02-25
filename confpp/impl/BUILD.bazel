@@ -1,0 +1,18 @@
+cc_library(
+    name = "field_indexer",
+    srcs = ["field_indexer.cpp"],
+    hdrs = ["field_indexer.h"],
+)
+
+cc_test(
+    name = "field_indexer_test",
+    srcs = ["field_indexer_test.cpp"],
+    deps = [
+        ":field_indexer",
+        "@catch2//:catch2_main",
+    ],
+)
+
+test_suite(
+    name = "tests",
+)

@@ -1,6 +1,5 @@
-cc_library(
+alias(
     name = "confpp",
-    hdrs = ["conf++.h"],
+    actual = "//confpp",
     visibility = ["//visibility:public"],
-    deps = ["//lib"],
 )
