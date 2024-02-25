@@ -1,14 +1,14 @@
 cc_library(
-    name = "field_indexer",
-    srcs = ["field_indexer.cpp"],
-    hdrs = ["field_indexer.h"],
+    name = "field_retriever",
+    srcs = ["field_retriever.cpp"],
+    hdrs = ["field_retriever.h"],
 )
 
 cc_test(
-    name = "field_indexer_test",
-    srcs = ["field_indexer_test.cpp"],
+    name = "field_retriever_test",
+    srcs = ["field_retriever_test.cpp"],
     deps = [
-        ":field_indexer",
+        ":field_retriever",
         "@catch2//:catch2_main",
     ],
 )
