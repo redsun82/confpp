@@ -10,7 +10,7 @@ void *FieldIndexer::index(size_t align, size_t size) {
   return res;
 }
 
-bool FieldIndexer::check(void *address, size_t size) const {
+bool FieldIndexer::indexed(void *address, size_t size) const {
   return current == reinterpret_cast<char *>(address) + size;
 }
 } // namespace confpp

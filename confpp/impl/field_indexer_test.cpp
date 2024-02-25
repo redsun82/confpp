@@ -25,7 +25,7 @@ TEST_CASE("field_indexer") {
     CHECK(&s.e == sut.index<uint16_t>());
     CHECK(&s.f == sut.index<std::vector<char>>());
 
-    CHECK(sut.check(s));
+    CHECK(sut.indexed(s));
   }
   SECTION("skipped indexing") {
     sut.index<int>();
@@ -34,6 +34,6 @@ TEST_CASE("field_indexer") {
     sut.index<uint16_t>();
     sut.index<std::vector<char>>();
 
-    CHECK_FALSE(sut.check(s));
+    CHECK_FALSE(sut.indexed(s));
   }
 }
