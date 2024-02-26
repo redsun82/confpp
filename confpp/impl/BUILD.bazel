@@ -25,7 +25,6 @@ cc_test(
 
 cc_library(
     name = "field_processor_builtin",
-    srcs = ["field_processor_builtin.cpp"],
     hdrs = ["field_processor_builtin.h"],
     deps = ["//confpp:field_processor"],
 )
@@ -40,7 +39,7 @@ cc_library(
 cc_test(
     name = "field_processor_test",
     size = "small",
-    srcs = glob(["field_processor_test.cpp"]),
+    srcs = ["field_processor_test.cpp"],
     deps = [
         ":field_processor_builtin",
         ":field_processor_mocks",
