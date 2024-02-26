@@ -1,4 +1,13 @@
 cc_library(
+    name = "impl",
+    visibility = ["//confpp:__pkg__"],
+    deps = [
+        ":field_processor_builtin",
+        ":field_retriever",
+    ],
+)
+
+cc_library(
     name = "field_retriever",
     srcs = ["field_retriever.cpp"],
     hdrs = ["field_retriever.h"],
@@ -15,15 +24,17 @@ cc_test(
 )
 
 cc_library(
-    name = "field_processor_interface",
-    hdrs = ["field_processor.h"],
-)
-
-cc_library(
     name = "field_processor_builtin",
     srcs = ["field_processor_builtin.cpp"],
     hdrs = ["field_processor_builtin.h"],
-    deps = [":field_processor_interface"],
+    deps = ["//confpp:field_processor"],
+)
+
+cc_library(
+    name = "field_processor_mocks",
+    testonly = True,
+    hdrs = ["field_processor_mocks.h"],
+    deps = ["@trompeloeil"],
 )
 
 cc_test(
@@ -32,7 +43,19 @@ cc_test(
     srcs = glob(["field_processor_test.cpp"]),
     deps = [
         ":field_processor_builtin",
+        ":field_processor_mocks",
         "@catch2//:catch2_main",
+        "@trompeloeil",
+    ],
+)
+
+cc_test(
+    name = "configuration_test",
+    srcs = ["configuration_test.cpp"],
+    deps = [
+        "//confpp",
+        "@catch2//:catch2_main",
+        "@trompeloeil",
     ],
 )
 
