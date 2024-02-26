@@ -24,6 +24,7 @@ public:
   FieldProcessor(const FieldProcessor &) = delete;
   FieldProcessor &operator=(const FieldProcessor &) = delete;
 
+  virtual void set_default() const = 0;
   virtual bool requires_cli_arg() const { return true; }
   virtual bool get_from_cli(LoadingContext &ctx, const char *arg) = 0;
   virtual bool get_from_negated_cli(LoadingContext &ctx) {

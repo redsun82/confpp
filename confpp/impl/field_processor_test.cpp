@@ -11,8 +11,15 @@ using namespace std::string_view_literals;
 
 TEST_CASE("bool field processor") {
   LoadingContextMock ctx;
+  bool default_value = GENERATE(false, true);
   bool value = false;
-  DefaultFieldProcessor<bool> processor{value};
+  DefaultFieldProcessor<bool> processor{value, default_value};
+
+  SECTION("set_default") {
+    value = !default_value;
+    processor.set_default();
+    REQUIRE(value == default_value);
+  }
 
   SECTION("requires_cli_arg") {
     REQUIRE(processor.requires_cli_arg() == false);
@@ -21,15 +28,15 @@ TEST_CASE("bool field processor") {
   SECTION("get_from_cli") {
     SECTION("get_from_cli true") {
       REQUIRE(processor.get_from_cli(ctx, "true"));
-      REQUIRE(value);
+      REQUIRE(value == true);
     }
     SECTION("get_from_cli empty") {
       REQUIRE(processor.get_from_cli(ctx, ""));
-      REQUIRE(value);
+      REQUIRE(value == true);
     }
     SECTION("get_from_cli nullptr") {
       REQUIRE(processor.get_from_cli(ctx, nullptr));
-      REQUIRE(value);
+      REQUIRE(value == true);
     }
     SECTION("get_from_cli false") {
       value = true;
@@ -56,7 +63,12 @@ TEMPLATE_TEST_CASE("string field processor", "", std::string, std::string_view,
                    const char *, std::optional<std::string>) {
   LoadingContextMock ctx;
   TestType value = "garbage";
-  DefaultFieldProcessor<TestType> processor{value};
+  DefaultFieldProcessor<TestType> processor{value, "default"};
+
+  SECTION("set_default") {
+    processor.set_default();
+    REQUIRE(value == "default"sv);
+  }
 
   SECTION("requires_cli_arg") { REQUIRE(processor.requires_cli_arg()); }
 

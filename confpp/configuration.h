@@ -19,46 +19,75 @@ class Configuration {
   FieldRetriever retriever;
   std::unordered_map<std::string, std::unique_ptr<FieldProcessor>> processors;
 
-  template <typename T> T annotate(std::string &&name) {
+  template <typename T>
+  T &&annotate(std::string &&name, T &&default_value = T()) {
     auto &field = retriever.retrieve<T>();
     auto [it, inserted] = processors.emplace(
-        std::move(name), std::make_unique<DefaultFieldProcessor<T>>(field));
+        std::move(name),
+        std::make_unique<DefaultFieldProcessor<T>>(field, default_value));
     assert(inserted);
-    return T();
+    return std::forward<T>(default_value);
   }
 
-  template <typename T> struct is_optional : std::false_type {};
+  template <bool Optional, typename U> struct DefaultAnnotator;
 
-  template <typename T>
-  struct is_optional<std::optional<T>> : std::true_type {};
-
-  struct OptionalAnnotator;
-
-  struct Annotator {
+  template <bool Optional = false> struct Annotator {
     Configuration &conf;
     std::string name;
 
-    template <typename T> operator T() && {
+    template <typename T>
+      requires(!Optional)
+    operator T() && {
       return conf.annotate<T>(std::move(name));
     }
 
-    OptionalAnnotator optional() &&;
+    template <typename T>
+      requires(Optional)
+    operator T() && = delete;
+
+    template <typename T>
+      requires(Optional)
+    operator std::optional<T>() && {
+      return conf.annotate<std::optional<T>>(std::move(name));
+    }
+
+    template <typename T>
+    DefaultAnnotator<Optional, T> with_default(T &&default_value);
   };
 
-  struct OptionalAnnotator : Annotator {
+  template <bool Optional, typename U>
+  struct DefaultAnnotator : Annotator<Optional> {
+    using Annotator<Optional>::conf;
+    using Annotator<Optional>::name;
+
+    U default_value;
+
+    DefaultAnnotator(Configuration &conf, std::string name, U &&default_value)
+        : Annotator<Optional>{conf, std::move(name)},
+          default_value{std::move(default_value)} {}
+
+    template <typename T> operator T() && = delete;
+
     template <typename T>
-      requires(is_optional<T>::value)
+      requires(std::convertible_to<U, T> && !Optional)
     operator T() && {
-      return conf.annotate<T>(std::move(name));
+      return conf.template annotate<T>(std::move(name),
+                                       std::move(default_value));
+    }
+
+    template <typename T>
+      requires(std::convertible_to<U, std::optional<T>> && Optional)
+    operator std::optional<T>() && {
+      return conf.template annotate<std::optional<T>>(std::move(name),
+                                                      std::move(default_value));
     }
   };
 
 protected:
   Configuration();
   ~Configuration() = default;
-  Annotator field(std::string name) { return {*this, std::move(name)}; }
-
-  OptionalAnnotator opt_field(std::string name) {
+  Annotator<false> field(std::string name) { return {*this, std::move(name)}; }
+  Annotator<true> opt_field(std::string name) {
     return {*this, std::move(name)};
   }
 
@@ -131,9 +160,19 @@ public:
     }
     return true;
   }
+
+  void clear() {
+    for (auto &p : processors) {
+      p.second->set_default();
+    }
+  }
 };
 
-Configuration::OptionalAnnotator Configuration::Annotator::optional() && {
-  return OptionalAnnotator{conf, std::move(name)};
+template <bool Optional>
+template <typename T>
+Configuration::DefaultAnnotator<Optional, T>
+Configuration::Annotator<Optional>::with_default(T &&default_value) {
+  return {conf, std::move(name), std::forward<T>(default_value)};
 }
+
 } // namespace confpp

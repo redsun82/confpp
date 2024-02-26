@@ -14,6 +14,7 @@ public:
 
 class FieldProcessorMock : public FieldProcessor {
 public:
+  MAKE_MOCK0(set_default, void(), const override);
   MAKE_MOCK0(requires_cli_arg, bool(), const override);
   MAKE_MOCK2(get_from_cli, bool(LoadingContext &, const char *), override);
   MAKE_MOCK1(get_from_negated_cli, bool(LoadingContext &), override);

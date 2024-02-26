@@ -7,11 +7,25 @@
 #include <type_traits>
 
 namespace confpp {
-template <> class DefaultFieldProcessor<bool> : public FieldProcessor {
-  bool &value;
+
+template <typename T> class DefaultFieldProcessorBase : public FieldProcessor {
+protected:
+  T &value;
+  T default_value;
 
 public:
-  DefaultFieldProcessor(bool &value) : value{value} {}
+  DefaultFieldProcessorBase(T &value, T default_value = {})
+      : value{value}, default_value{default_value} {}
+
+  void set_default() const override { value = default_value; }
+};
+
+template <>
+class DefaultFieldProcessor<bool> : public DefaultFieldProcessorBase<bool> {
+
+public:
+  using DefaultFieldProcessorBase<bool>::DefaultFieldProcessorBase;
+  using DefaultFieldProcessorBase<bool>::value;
 
   bool requires_cli_arg() const override { return false; }
 
@@ -41,11 +55,10 @@ template <typename T> struct is_optional<std::optional<T>> : std::true_type {};
 
 template <typename T>
   requires std::convertible_to<const char *, T>
-class DefaultFieldProcessor<T> : public FieldProcessor {
-  T &value;
-
+class DefaultFieldProcessor<T> : public DefaultFieldProcessorBase<T> {
 public:
-  DefaultFieldProcessor(T &value) : value{value} {}
+  using DefaultFieldProcessorBase<T>::DefaultFieldProcessorBase;
+  using DefaultFieldProcessorBase<T>::value;
 
   bool get_from_cli(LoadingContext &ctx, const char *arg) override {
     value = arg;
