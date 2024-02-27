@@ -3,7 +3,7 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "confpp",
     srcs = ["configuration.cpp"],
-    hdrs = ["configuration.h"],
+    hdrs = ["configuration.hpp"],
     deps = [
         ":field_processor",
         "//confpp/impl",
@@ -13,5 +13,5 @@ cc_library(
 
 cc_library(
     name = "field_processor",
-    hdrs = ["field_processor.h"],
+    hdrs = ["field_processor.hpp"],
 )

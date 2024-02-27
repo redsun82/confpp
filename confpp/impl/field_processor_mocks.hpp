@@ -2,7 +2,7 @@
 
 #include <trompeloeil.hpp>
 
-#include "confpp/field_processor.h"
+#include "confpp/field_processor.hpp"
 
 namespace confpp {
 

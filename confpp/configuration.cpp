@@ -1,5 +1,6 @@
-#include "confpp/configuration.h"
-#include "configuration.h"
+#include "confpp/configuration.hpp"
+
+#include "configuration.hpp"
 
 namespace confpp {
 Configuration::Configuration() : retriever{*this} {

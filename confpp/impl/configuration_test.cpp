@@ -1,13 +1,11 @@
+#include "confpp/configuration.hpp"
+
 #include <catch2/catch_all.hpp>
-
-#include "confpp/configuration.h"
-
 #include <optional>
 
 using namespace std::string_view_literals;
 
 TEST_CASE("integration test") {
-
   struct Conf : confpp::Configuration {
     std::string a1 = field("a1");
     const char *a2 = field("a2");

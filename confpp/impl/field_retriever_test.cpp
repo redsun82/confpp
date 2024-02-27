@@ -1,4 +1,4 @@
-#include "confpp/impl/field_retriever.h"
+#include "confpp/impl/field_retriever.hpp"
 
 #include <catch2/catch_all.hpp>
 #include <cstdint>

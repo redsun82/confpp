@@ -1,7 +1,8 @@
 #pragma once
 
-#include <cassert>
 #include <fmt/core.h>
+
+#include <cassert>
 #include <memory>
 #include <optional>
 #include <span>
@@ -10,9 +11,9 @@
 #include <type_traits>
 #include <unordered_map>
 
-#include "confpp/field_processor.h"
-#include "confpp/impl/field_processor_builtin.h"
-#include "confpp/impl/field_retriever.h"
+#include "confpp/field_processor.hpp"
+#include "confpp/impl/field_processor_builtin.hpp"
+#include "confpp/impl/field_retriever.hpp"
 
 namespace confpp {
 class Configuration {

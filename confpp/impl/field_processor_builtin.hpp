@@ -1,28 +1,15 @@
 #pragma once
 
-#include "confpp/field_processor.h"
-
 #include <concepts>
 #include <optional>
 #include <type_traits>
 
+#include "confpp/field_processor.hpp"
+
 namespace confpp {
-
-template <typename T> class DefaultFieldProcessorBase : public FieldProcessor {
-protected:
-  T &value;
-  T default_value;
-
-public:
-  DefaultFieldProcessorBase(T &value, T default_value = {})
-      : value{value}, default_value{default_value} {}
-
-  void set_default() const override { value = default_value; }
-};
 
 template <>
 class DefaultFieldProcessor<bool> : public DefaultFieldProcessorBase<bool> {
-
 public:
   using DefaultFieldProcessorBase<bool>::DefaultFieldProcessorBase;
   using DefaultFieldProcessorBase<bool>::value;
@@ -70,8 +57,7 @@ public:
       value = std::nullopt;
       return true;
     } else {
-      ctx.error("Negated flag not supported");
-      return false;
+      return DefaultFieldProcessorBase<T>::get_from_negated_cli(ctx);
     }
   };
 };

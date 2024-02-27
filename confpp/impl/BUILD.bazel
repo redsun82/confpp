@@ -10,7 +10,7 @@ cc_library(
 cc_library(
     name = "field_retriever",
     srcs = ["field_retriever.cpp"],
-    hdrs = ["field_retriever.h"],
+    hdrs = ["field_retriever.hpp"],
 )
 
 cc_test(
@@ -25,14 +25,14 @@ cc_test(
 
 cc_library(
     name = "field_processor_builtin",
-    hdrs = ["field_processor_builtin.h"],
+    hdrs = ["field_processor_builtin.hpp"],
     deps = ["//confpp:field_processor"],
 )
 
 cc_library(
     name = "field_processor_mocks",
     testonly = True,
-    hdrs = ["field_processor_mocks.h"],
+    hdrs = ["field_processor_mocks.hpp"],
     deps = ["@trompeloeil"],
 )
 

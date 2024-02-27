@@ -1,9 +1,9 @@
 #include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
-#include "confpp/impl/field_processor_builtin.h"
-#include "confpp/impl/field_processor_mocks.h"
-#include "field_processor_mocks.h"
+#include "confpp/impl/field_processor_builtin.hpp"
+#include "confpp/impl/field_processor_mocks.hpp"
+#include "field_processor_mocks.hpp"
 
 using namespace confpp;
 using namespace trompeloeil;

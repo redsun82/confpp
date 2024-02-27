@@ -35,4 +35,16 @@ public:
 
 template <typename T> class DefaultFieldProcessor;
 
+template <typename T> class DefaultFieldProcessorBase : public FieldProcessor {
+protected:
+  T &value;
+  T default_value;
+
+public:
+  DefaultFieldProcessorBase(T &value, T default_value = {})
+      : value{value}, default_value{default_value} {}
+
+  void set_default() const override { value = default_value; }
+};
+
 } // namespace confpp
