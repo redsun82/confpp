@@ -10,14 +10,14 @@ using namespace trompeloeil;
 using namespace std::string_view_literals;
 
 TEST_CASE("bool field processor") {
-  LoadingContextMock ctx;
+  ConfigurationContextMock ctx;
   bool default_value = GENERATE(false, true);
   bool value = false;
   DefaultFieldProcessor<bool> processor{value, default_value};
 
-  SECTION("set_default") {
+  SECTION("clear") {
     value = !default_value;
-    processor.set_default();
+    processor.clear();
     REQUIRE(value == default_value);
   }
 
@@ -61,12 +61,12 @@ TEST_CASE("bool field processor") {
 
 TEMPLATE_TEST_CASE("string field processor", "", std::string, std::string_view,
                    const char *, std::optional<std::string>) {
-  LoadingContextMock ctx;
+  ConfigurationContextMock ctx;
   TestType value = "garbage";
   DefaultFieldProcessor<TestType> processor{value, "default"};
 
-  SECTION("set_default") {
-    processor.set_default();
+  SECTION("clear") {
+    processor.clear();
     REQUIRE(value == "default"sv);
   }
 

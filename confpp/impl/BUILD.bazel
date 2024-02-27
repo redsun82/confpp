@@ -33,7 +33,10 @@ cc_library(
     name = "field_processor_mocks",
     testonly = True,
     hdrs = ["field_processor_mocks.hpp"],
-    deps = ["@trompeloeil"],
+    deps = [
+        "//confpp:field_processor",
+        "@trompeloeil",
+    ],
 )
 
 cc_test(
@@ -45,6 +48,21 @@ cc_test(
         ":field_processor_mocks",
         "@catch2//:catch2_main",
         "@trompeloeil",
+    ],
+)
+
+cc_library(
+    name = "field_descriptor",
+    hdrs = ["field_descriptor.hpp"],
+    deps = ["//confpp:field_processor"],
+)
+
+cc_test(
+    name = "field_descriptor_test",
+    srcs = ["field_descriptor_test.cpp"],
+    deps = [
+        ":field_descriptor",
+        "@catch2//:catch2_main",
     ],
 )
 

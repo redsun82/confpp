@@ -16,7 +16,7 @@ public:
 
   bool requires_cli_arg() const override { return false; }
 
-  bool get_from_cli(LoadingContext &ctx, const char *arg) override {
+  bool get_from_cli(ConfigurationContext &ctx, const char *arg) override {
     using namespace std::string_view_literals;
     if (!arg || arg == ""sv || arg == "true"sv) {
       value = true;
@@ -30,7 +30,7 @@ public:
     return false;
   }
 
-  bool get_from_negated_cli(LoadingContext &ctx) override {
+  bool get_from_negated_cli(ConfigurationContext &ctx) override {
     value = false;
     return true;
   };
@@ -47,12 +47,12 @@ public:
   using DefaultFieldProcessorBase<T>::DefaultFieldProcessorBase;
   using DefaultFieldProcessorBase<T>::value;
 
-  bool get_from_cli(LoadingContext &ctx, const char *arg) override {
+  bool get_from_cli(ConfigurationContext &ctx, const char *arg) override {
     value = arg;
     return true;
   }
 
-  bool get_from_negated_cli(LoadingContext &ctx) override {
+  bool get_from_negated_cli(ConfigurationContext &ctx) override {
     if constexpr (is_optional<T>::value) {
       value = std::nullopt;
       return true;

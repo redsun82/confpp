@@ -101,13 +101,15 @@ public:
 
   bool load_from_cli(std::span<const char *const> args) {
     // TODO: implement this in a separate class
-    struct Ctx : LoadingContext {
+    struct Ctx : ConfigurationContext {
       std::string_view arg;
 
+      void set_current_field(std::string_view field) { arg = field; }
       std::string_view current_field() const override { return arg; }
       void error(std::string_view m) override {
         fmt::println("While processing --{}: {}", arg, m);
       }
+      void check_errors() const override {}
     };
     Ctx ctx;
     args = args.subspan(1);
@@ -164,7 +166,7 @@ public:
 
   void clear() {
     for (auto &p : processors) {
-      p.second->set_default();
+      p.second->clear();
     }
   }
 };
