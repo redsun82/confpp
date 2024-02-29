@@ -36,11 +36,12 @@ auto field(std::string name) {
   return FieldDescriptor<DefaultSource>{std::move(name), default_source};
 }
 
-template <typename T, std::convertible_to<T> D>
-std::pair<std::string, FieldProcessor::ptr_t>
-make_processor_item(T &dest, FieldDescriptor<D> &&descriptor) {
-  return {std::move(descriptor.name),
-          std::make_unique<DefaultFieldProcessor<T>>(
-              dest, std::move(descriptor.default_value), descriptor.flags)};
-}
+template <typename T, typename D>
+  requires std::constructible_from<T, D>
+auto make_processor_item(T &dest, FieldDescriptor<D> &&descriptor) {
+  FieldProcessor::ptr_t p = std::make_unique<DefaultFieldProcessor<T>>(
+      dest, T{std::move(descriptor.default_value)}, descriptor.flags);
+  return std::pair<std::string, FieldProcessor::ptr_t>{
+      std::move(descriptor.name), std::move(p)};
+};
 } // namespace confpp
